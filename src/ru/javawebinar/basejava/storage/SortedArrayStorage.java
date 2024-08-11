@@ -4,27 +4,14 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
-    public void save(Resume resume) {
-        if (size >= STORAGE_LIMIT) {
-            System.out.println("Ошибка: storage переполнено");
-        } else if (isExist(getIndex(resume.getUuid()))) {
-            System.out.println("Ошибка: такое резюме уже есть");
-        } else {
-            int index = -(Arrays.binarySearch(storage, 0, size, resume) + 1);
-            System.arraycopy(storage, index, storage, index + 1, size - index);
-            storage[index] = resume;
-            size++;
-        }
+    protected int getInsertionPoint(int index) {
+        index = -(index + 1);
+        System.arraycopy(storage, index, storage, index + 1, size - index);
+        return index;
     }
 
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (!isExist(index)) {
-            System.out.println("Ошибка: такого резюме нет");
-        } else {
-            System.arraycopy(storage, index + 1, storage, index, (size - index - 1));
-            size--;
-        }
+    protected void remove(int index) {
+        System.arraycopy(storage, index + 1, storage, index, (size - index - 1));
     }
 
     protected int getIndex(String uuid) {

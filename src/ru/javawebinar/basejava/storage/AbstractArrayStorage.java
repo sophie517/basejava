@@ -14,7 +14,7 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public void update(Resume resume) {
+    public final void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (isExist(index)) {
             storage[index] = resume;
@@ -24,9 +24,21 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    public abstract void save(Resume resume);
+    public final void save(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (size >= STORAGE_LIMIT) {
+            System.out.println("Ошибка: storage переполнено");
+        } else if (isExist(index)) {
+            System.out.println("Ошибка: такое резюме уже есть");
+        } else {
+            storage[getInsertionPoint(index)] = resume;
+            size++;
+        }
+    }
 
-    public Resume get(String uuid) {
+    protected abstract int getInsertionPoint(int index);
+
+    public final Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index <= -1) {
             System.out.println("Резюме " + uuid + " не существует");
@@ -35,7 +47,17 @@ public abstract class AbstractArrayStorage implements Storage {
         return storage[index];
     }
 
-    public abstract void delete(String uuid);
+    public final void delete(String uuid) {
+        int index = getIndex(uuid);
+        if (!isExist(index)) {
+            System.out.println("Ошибка: такого резюме нет");
+        } else {
+            remove(index);
+            size--;
+        }
+    }
+
+    protected abstract void remove(int index);
 
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
