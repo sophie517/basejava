@@ -31,12 +31,12 @@ public abstract class AbstractArrayStorage implements Storage {
         } else if (isExist(index)) {
             System.out.println("Ошибка: такое резюме уже есть");
         } else {
-            storage[getInsertionPoint(index)] = resume;
+            insertResume(index, resume);
             size++;
         }
     }
 
-    protected abstract int getInsertionPoint(int index);
+    protected abstract void insertResume(int index, Resume resume);
 
     public final Resume get(String uuid) {
         int index = getIndex(uuid);
@@ -52,12 +52,12 @@ public abstract class AbstractArrayStorage implements Storage {
         if (!isExist(index)) {
             System.out.println("Ошибка: такого резюме нет");
         } else {
-            remove(index);
+            removeResume(index);
             size--;
         }
     }
 
-    protected abstract void remove(int index);
+    protected abstract void removeResume(int index);
 
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);

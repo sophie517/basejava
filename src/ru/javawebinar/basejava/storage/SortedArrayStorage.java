@@ -4,13 +4,13 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
-    protected int getInsertionPoint(int index) {
+    protected void insertResume(int index, Resume resume) {
         index = -(index + 1);
         System.arraycopy(storage, index, storage, index + 1, size - index);
-        return index;
+        storage[index] = resume;
     }
 
-    protected void remove(int index) {
+    protected void removeResume(int index) {
         System.arraycopy(storage, index + 1, storage, index, (size - index - 1));
     }
 
