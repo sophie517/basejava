@@ -35,7 +35,7 @@ public abstract class AbstractArrayStorageTest {
     @Test
     public void clear() {
         storage.clear();
-        Assertions.assertEquals(0, storage.size());
+        assertSize(0);
         assertNotExist(UUID_1);
         assertNotExist(UUID_2);
         assertNotExist(UUID_3);
