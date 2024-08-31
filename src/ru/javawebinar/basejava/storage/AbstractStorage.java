@@ -4,7 +4,7 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<T> implements Storage {
     public final void clear() {
         clearResumes();
     }
@@ -12,47 +12,32 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void clearResumes();
 
     public final void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (isExist(index)) {
-            updateResume(index, resume);
-        } else {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+        T searchKey = getExistingSearchKey(resume.getUuid());
+        updateResume(searchKey, resume);
     }
 
-    protected abstract void updateResume(int index, Resume resume);
+    protected abstract void updateResume(T searchKey, Resume resume);
 
     public final void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (isExist(index)) {
-            throw new ExistStorageException(resume.getUuid());
-        } else {
-            saveResume(index, resume);
-        }
+        T searchKey = getNotExistingSearchKey(resume.getUuid());
+        saveResume(searchKey, resume);
     }
 
-    protected abstract void saveResume(int index, Resume resume);
+    protected abstract void saveResume(T searchKey, Resume resume);
 
     public final Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index <= -1) {
-            throw new NotExistStorageException(uuid);
-        }
-        return getResume(index);
+        T searchKey = getExistingSearchKey(uuid);
+        return getResume(searchKey);
     }
 
-    protected abstract Resume getResume(int index);
+    protected abstract Resume getResume(T searchKey);
 
     public final void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (!isExist(index)) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            deleteResume(index);
-        }
+        T searchKey = getExistingSearchKey(uuid);
+        deleteResume(searchKey);
     }
 
-    protected abstract void deleteResume(int index);
+    protected abstract void deleteResume(T searchKey);
 
     public final Resume[] getAll() {
         return getAllResumes();
@@ -66,7 +51,23 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract int getSize();
 
-    protected abstract boolean isExist(int index);
+    protected final T getExistingSearchKey(String uuid) {
+        T searchKey = getSearchKey(uuid);
+        if (!isExist(searchKey)) {
+            throw new NotExistStorageException(uuid);
+        }
+        return searchKey;
+    }
 
-    protected abstract int getIndex(String uuid);
+    protected final T getNotExistingSearchKey(String uuid) {
+        T searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
+            throw new ExistStorageException(uuid);
+        }
+        return searchKey;
+    }
+
+    protected abstract boolean isExist(T searchKey);
+
+    protected abstract T getSearchKey(String uuid);
 }

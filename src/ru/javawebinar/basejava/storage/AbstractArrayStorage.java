@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -15,11 +15,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    protected void updateResume(int index, Resume resume) {
+    protected void updateResume(Integer index, Resume resume) {
         storage[index] = resume;
     }
 
-    protected void saveResume(int index, Resume resume) {
+    protected void saveResume(Integer index, Resume resume) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Ошибка: storage переполнено", resume.getUuid());
         } else {
@@ -28,20 +28,18 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         }
     }
 
-    protected abstract void insertResume(int index, Resume resume);
+    protected abstract void insertResume(Integer index, Resume resume);
 
-    protected Resume getResume(int index) {
+    protected Resume getResume(Integer index) {
         return storage[index];
     }
 
-    protected abstract int getIndex(String uuid);
-
-    protected void deleteResume(int index) {
+    protected void deleteResume(Integer index) {
         removeResume(index);
         size--;
     }
 
-    protected abstract void removeResume(int index);
+    protected abstract void removeResume(Integer index);
 
     protected Resume[] getAllResumes() {
         return Arrays.copyOf(storage, size);
@@ -51,7 +49,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    protected boolean isExist(int index) {
+    protected boolean isExist(Integer index) {
         return index > -1;
     }
+
+    protected abstract Integer getSearchKey(String uuid);
 }

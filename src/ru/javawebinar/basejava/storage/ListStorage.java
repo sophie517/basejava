@@ -3,8 +3,8 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 import java.util.*;
 
-public class ListStorage extends AbstractStorage {
-    protected  ArrayList<Resume> storage = new ArrayList<Resume>();
+public class ListStorage extends AbstractStorage<Integer> {
+    protected  ArrayList<Resume> storage = new ArrayList<>();
 
     @Override
     protected void clearResumes() {
@@ -12,23 +12,23 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(int index, Resume resume) {
+    protected void updateResume(Integer index, Resume resume) {
         storage.set(index, resume);
     }
 
     @Override
-    protected void saveResume(int index, Resume resume) {
+    protected void saveResume(Integer index, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected Resume getResume(int index) {
+    protected Resume getResume(Integer index) {
         return storage.get(index);
     }
 
     @Override
-    protected void deleteResume(int index) {
-        storage.remove(index);
+    protected void deleteResume(Integer index) {
+        storage.remove(storage.get(index));
     }
 
     @Override
@@ -42,12 +42,13 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isExist(int index) {
+    protected boolean isExist(Integer index) {
         return index != -1;
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        return storage.indexOf(new Resume(uuid));
+    protected Integer getSearchKey(String uuid) {
+        Resume resume = new Resume(uuid);
+        return storage.indexOf(resume);
     }
 }
