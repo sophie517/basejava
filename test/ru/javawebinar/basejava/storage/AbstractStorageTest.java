@@ -65,9 +65,6 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    protected abstract void overflow();
-
-    @Test
     public void get() {
         assertGet(resume1);
         assertGet(resume2);
