@@ -2,11 +2,11 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MapStorage extends AbstractStorage<String> {
-    protected HashMap<String, Resume> storage = new LinkedHashMap<>();
+    protected Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override
     protected void clearResumes() {
