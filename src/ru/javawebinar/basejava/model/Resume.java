@@ -5,16 +5,19 @@ import java.util.UUID;
 /**
  * ru.javawebinar.basejava.model.Resume class
  */
-public class Resume implements Comparable<Resume> {
+public class Resume {
     // Unique identifier
     private final String uuid;
 
-    public Resume() {
-        this(UUID.randomUUID().toString());
+    private final String fullName;
+
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
     }
 
-    public Resume(String uuid) {
+    public Resume(String uuid, String fullName) {
         this.uuid = uuid;
+        this.fullName = fullName;
     }
 
     public String getUuid() {
@@ -27,19 +30,21 @@ public class Resume implements Comparable<Resume> {
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid);
+        return uuid.equals(resume.uuid) && fullName.equals(resume.fullName);
     }
 
     public int hashCode() {
-        return uuid.hashCode();
+        int hashCode = uuid.hashCode();
+        hashCode = 31 * hashCode + fullName.hashCode();
+        return hashCode;
     }
 
     @Override
     public String toString() {
-        return uuid;
+        return uuid + "; " + fullName;
     }
 
-    public int compareTo(Resume o) {
-        return uuid.compareTo(o.uuid);
+    public String getFullName() {
+        return fullName;
     }
 }

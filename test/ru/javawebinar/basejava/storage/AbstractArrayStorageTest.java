@@ -10,17 +10,16 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest{
         super(storage);
     }
 
-    @Override
     @Test
     protected void overflow() {
         storage.clear();
         try {
             for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
+                storage.save(new Resume("name"));
             }
         } catch (StorageException exception) {
             Assertions.fail();
         }
-        Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume()));
+        Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume("name")));
     }
 }

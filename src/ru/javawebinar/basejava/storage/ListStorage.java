@@ -32,8 +32,9 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected Resume[] getAllResumes() {
-        return storage.toArray(new Resume[0]);
+    protected List<Resume> getAllResumes() {
+        storage.sort(Comparator.comparing(Resume::getUuid));
+        return storage;
     }
 
     @Override
