@@ -2,8 +2,8 @@ package ru.javawebinar.basejava.storage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MapFullNameStorageTest extends AbstractStorageTest {
+class MapResumeStorageTest extends AbstractStorageTest {
     public MapFullNameStorageTest() {
-        super(new MapFullNameStorage());
+        super(new MapResumeStorage());
     }
 }
