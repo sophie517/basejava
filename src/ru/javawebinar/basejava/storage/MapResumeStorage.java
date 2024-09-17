@@ -4,7 +4,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.*;
 
-public class MapFullNameStorage extends AbstractStorage<String> {
+public class MapResumeStorage extends AbstractStorage<Resume> {
     protected Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override
@@ -13,23 +13,23 @@ public class MapFullNameStorage extends AbstractStorage<String> {
     }
 
     @Override
-    protected void updateResume(String searchKey, Resume resume) {
-        storage.put(searchKey, resume);
+    protected void updateResume(Resume searchKey, Resume resume) {
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void saveResume(String searchKey, Resume resume) {
-        storage.put(searchKey, resume);
+    protected void saveResume(Resume searchKey, Resume resume) {
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected Resume getResume(String searchKey) {
-        return storage.get(searchKey);
+    protected Resume getResume(Resume searchKey) {
+        return searchKey;
     }
 
     @Override
-    protected void deleteResume(String searchKey) {
-        storage.remove(searchKey);
+    protected void deleteResume(Resume searchKey) {
+        storage.remove(searchKey.getUuid());
     }
 
     @Override
@@ -45,12 +45,12 @@ public class MapFullNameStorage extends AbstractStorage<String> {
     }
 
     @Override
-    protected boolean isExist(String searchKey) {
-        return storage.containsKey(searchKey);
+    protected boolean isExist(Resume searchKey) {
+        return searchKey != null;
     }
 
     @Override
-    protected String getSearchKey(String uuid) {
-        return (new Resume(uuid)).getFullName();
+    protected Resume getSearchKey(String uuid) {
+        return storage.get(uuid);
     }
 }
