@@ -34,9 +34,7 @@ public class MapStorage extends AbstractStorage<String> {
 
     @Override
     protected List<Resume> getAllResumes() {
-        List<Resume> storageList = new ArrayList<>(storage.values());
-        storageList.sort(Comparator.comparing(Resume::getUuid));
-        return storageList;
+        return new ArrayList<>(storage.values());
     }
 
     @Override

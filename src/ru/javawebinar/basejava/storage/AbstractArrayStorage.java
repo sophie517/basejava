@@ -42,7 +42,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     protected List<Resume> getAllResumes() {
-        return List.of(Arrays.copyOf(storage, size));
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     protected abstract void removeResume(Integer index);
