@@ -1,6 +1,6 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.UUID;
+import java.util.*;
 
 /**
  * ru.javawebinar.basejava.model.Resume class
@@ -8,8 +8,9 @@ import java.util.UUID;
 public class Resume {
     // Unique identifier
     private final String uuid;
-
     private final String fullName;
+    private final List<Contact> contacts = new ArrayList<>();
+    private final Map<SectionType, Section> sections = new LinkedHashMap<>();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -41,10 +42,31 @@ public class Resume {
 
     @Override
     public String toString() {
-        return uuid + "; " + fullName;
+        System.out.println(fullName + "\n");
+        for (Contact contact : contacts) {
+            System.out.println(contact.toString());
+        }
+        System.out.println();
+        Iterator<Map.Entry<SectionType, Section>> iterator = sections.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<SectionType, Section> entry = iterator.next();
+            SectionType type = entry.getKey();
+            Section section = entry.getValue();
+            System.out.println(type.getTitle());
+            System.out.println(section.toString());
+        }
+        return "";
     }
 
     public String getFullName() {
         return fullName;
+    }
+
+    public void setContact(ContactType type, String content) {
+        contacts.add(new Contact(type, content));
+    }
+
+    public void setSection(SectionType type, Section section) {
+        sections.put(type, section);
     }
 }
