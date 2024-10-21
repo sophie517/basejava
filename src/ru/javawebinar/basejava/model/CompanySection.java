@@ -9,14 +9,22 @@ public class CompanySection extends Section {
         this.companies = companies;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CompanySection that = (CompanySection) o;
+        return companies.equals(that.companies);
+    }
+
+    public int hashCode() {
+        return companies.hashCode();
+    }
+
     public String toString() {
         for (Company company : companies) {
             System.out.println(company);
         }
         return "";
-    }
-
-    public int hashCode() {
-        return companies.hashCode();
     }
 }

@@ -18,14 +18,14 @@ public class ListSection extends Section {
         return elements.equals(list.elements);
     }
 
+    public int hashCode() {
+        return elements.hashCode();
+    }
+
     public String toString() {
         for (String element : elements) {
             System.out.println("- " + element);
         }
         return "";
-    }
-
-    public int hashCode() {
-        return elements.hashCode();
     }
 }

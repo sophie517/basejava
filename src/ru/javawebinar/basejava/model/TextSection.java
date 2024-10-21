@@ -16,11 +16,11 @@ public class TextSection extends Section {
         return content.equals(info.content);
     }
 
-    public String toString() {
-        return content + "\n";
-    }
-
     public int hashCode() {
         return content.hashCode();
+    }
+
+    public String toString() {
+        return content + "\n";
     }
 }

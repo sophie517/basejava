@@ -111,18 +111,24 @@ public class ResumeTestData {
                         new ArrayList<>(
                                 Arrays.asList(
                                         new Company("Java Online Projects",
+                                                List.of(new Period("10/2013", "Сейчас",
+                                                                "Автор проекта.",
                                                 """
-                                                Создание, организация и проведение Java онлайн проектов и стажировок.""",
-                                                List.of("10/2013 - Сейчас"),
-                                                List.of("Автор проекта.")),
+                                                Создание, организация и проведение Java онлайн проектов и стажировок.""")
+                                                )
+                                        ),
                                         new Company("Wrike",
+                                                List.of(new Period("10/2014", "01/2016",
+                                                                "Старший разработчик (backend)",
                                                 """
                                                 Проектирование и разработка онлайн платформы управления проектами Wrike
                                                 (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis).
-                                                Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.""",
-                                                List.of("10/2014 - 01/2016"),
-                                                List.of("Старший разработчик (backend)")),
+                                                Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.""")
+                                                )
+                                        ),
                                         new Company("RIT Center",
+                                                List.of(new Period("04/2012", "10/2014",
+                                                                "Java архитектор",
                                                 """
                                                 Организация процесса разработки системы ERP для разных окружений:
                                                 релизная политика, версионирование, ведение CI (Jenkins), миграция базы
@@ -132,45 +138,54 @@ public class ResumeTestData {
                                                 pdf, doc, html). Интеграция Alfresco JLAN для online редактирования из
                                                 браузера документов MS Office. Maven + plugin development, Ant, Apache
                                                 Commons, Spring security, Spring MVC, Tomcat, WSO2, xcmis, OpenCmis, Bonita,
-                                                Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python""",
-                                                List.of("04/2012 - 10/2014"),
-                                                List.of("Java архитектор")),
+                                                Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python""")
+                                                )
+                                        ),
                                         new Company("Luxoft (Deutsche Bank)",
+                                                List.of(new Period("12/2010", "04/2012",
+                                                                "Ведущий программист",
                                                 """
                                                 Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC,
                                                 SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM.
                                                 Реализация RIA-приложения для администрирования, мониторинга и анализа
                                                 результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC,
-                                                GWT, ExtGWT (GXT), Highstock, Commet, HTML5.""",
-                                                List.of("2/2010 - 04/2012"),
-                                                List.of("Ведущий программист")),
+                                                GWT, ExtGWT (GXT), Highstock, Commet, HTML5.""")
+                                                )
+                                        ),
                                         new Company("Yota",
+                                                List.of(new Period("06/2008", "12/2010",
+                                                                "Ведущий специалист",
                                                 """
                                                 Дизайн и имплементация Java EE фреймворка для отдела "Платежные Системы"
                                                 (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS,
                                                 Maven2). Реализация администрирования, статистики и мониторинга фреймворка.
-                                                Разработка online JMX клиента (Python/ Jython, Django, ExtJS)""",
-                                                List.of("06/2008 - 12/2010"),
-                                                List.of("Ведущий специалист")),
+                                                Разработка online JMX клиента (Python/ Jython, Django, ExtJS)""")
+                                                )
+                                        ),
                                         new Company("Enkata",
+                                                List.of(new Period("03/2007", "06/2008",
+                                                                "Разработчик ПО",
                                                 """
                                                 Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0,
-                                                Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).""",
-                                                List.of("03/2007 - 06/2008"),
-                                                List.of("Разработчик ПО")),
+                                                Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).""")
+                                                )
+                                        ),
                                         new Company("Siemens AG",
+                                                List.of(new Period("01/2005", "02/2007", "Разработчик ПО",
                                                 """
                                                  Разработка информационной модели, проектирование интерфейсов,
                                                  реализация и отладка ПО на мобильной IN платформе Siemens @vantage
-                                                 (Java, Unix).""",
-                                                List.of("01/2005 - 02/2007"),
-                                                List.of("Разработчик ПО")),
+                                                 (Java, Unix).""")
+                                                )
+                                        ),
                                         new Company("Alcatel",
+                                                List.of(new Period("09/1997", "01/2005",
+                                                                "Инженер по аппаратному и программному тестированию",
                                                 """
                                                  Тестирование, отладка, внедрение ПО цифровой телефонной
-                                                 станции Alcatel 1000 S12 (CHILL, ASM).""",
-                                                List.of("09/1997 - 01/2005"),
-                                                List.of("Инженер по аппаратному и программному тестированию"))
+                                                 станции Alcatel 1000 S12 (CHILL, ASM).""")
+                                                )
+                                        )
                                 )
                         )
                 )
@@ -182,31 +197,39 @@ public class ResumeTestData {
                         new ArrayList<>(
                                 List.of(
                                         new Company("Coursera",
-                                                "",
-                                                List.of("03/2013 - 05/2013"),
-                                                List.of("'Functional Programming Principles in Scala' by Martin Odersky")),
+                                                List.of(new Period("03/2013", "05/2013",
+                                                        "'Functional Programming Principles in Scala' by Martin Odersky", "")
+                                                )
+                                        ),
                                         new Company("Luxoft",
-                                                "",
-                                                List.of("03/2011 - 04/2011"),
-                                                List.of("Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'")),
+                                                List.of(new Period("03/2011", "04/2011",
+                                                        "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", "")
+                                                )
+                                        ),
                                         new Company("Siemens AG",
-                                                "",
-                                                List.of("01/2005 - 04/2005"),
-                                                List.of("3 месяца обучения мобильным IN сетям (Берлин)")),
+                                                List.of(new Period("01/2005", "04/2005",
+                                                                "3 месяца обучения мобильным IN сетям (Берлин)", "")
+                                                )
+                                        ),
                                         new Company("Alcatel",
-                                                "",
-                                                List.of("09/1997 - 03/1998"),
-                                                List.of("6 месяцев обучения цифровым телефонным сетям (Москва)")),
+                                                List.of(new Period("09/1997", "03/1998",
+                                                                "6 месяцев обучения цифровым телефонным сетям (Москва)", "")
+                                                )
+                                        ),
                                         new Company("Санкт-Петербургский национальный исследовательский " +
                                                     "университет информационных технологий, механики и оптики",
-                                                "",
-                                                List.of("09/1993 - 07/1996", "09/1987 - 07/1993"),
-                                                List.of("Аспирантура (программист С, С++)", "Инженер (программист Fortran, C)")),
+                                                List.of(new Period("09/1993", "07/1996",
+                                                                "Аспирантура (программист С, С++)", ""),
+                                                new Period("09/1987", "07/1993",
+                                                        "Инженер (программист Fortran, C)", "")
+                                                )
+                                        ),
                                         new Company(
                                                 "Заочная физико-техническая школа при МФТИ",
-                                                "",
-                                                List.of("09/1984 - 06/1987"),
-                                                List.of("Закончил с отличием"))
+                                                List.of(new Period("09/1984", "06/1987",
+                                                        "Закончил с отличием", "")
+                                                )
+                                        )
                                 )
                         )
                 )

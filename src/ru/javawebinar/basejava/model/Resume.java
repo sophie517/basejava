@@ -6,7 +6,6 @@ import java.util.*;
  * ru.javawebinar.basejava.model.Resume class
  */
 public class Resume {
-    // Unique identifier
     private final String uuid;
     private final String fullName;
     private final List<Contact> contacts = new ArrayList<>();
@@ -37,6 +36,8 @@ public class Resume {
     public int hashCode() {
         int hashCode = uuid.hashCode();
         hashCode = 31 * hashCode + fullName.hashCode();
+        hashCode = 31 * hashCode + contacts.hashCode();
+        hashCode = 31 * hashCode + sections.hashCode();
         return hashCode;
     }
 
