@@ -8,7 +8,7 @@ import java.util.*;
 public class Resume {
     private final String uuid;
     private final String fullName;
-    private final List<Contact> contacts = new ArrayList<>();
+    private final Map<ContactType, String> contacts = new LinkedHashMap<>();
     private final Map<SectionType, Section> sections = new LinkedHashMap<>();
 
     public Resume(String fullName) {
@@ -44,13 +44,18 @@ public class Resume {
     @Override
     public String toString() {
         System.out.println(fullName + "\n");
-        for (Contact contact : contacts) {
-            System.out.println(contact.toString());
+        Iterator<Map.Entry<ContactType, String>> contactIterator = contacts.entrySet().iterator();
+        while (contactIterator.hasNext()) {
+            Map.Entry<ContactType, String> entry = contactIterator.next();
+            ContactType type = entry.getKey();
+            String contact = entry.getValue();
+            System.out.print(type.getTitle() + ": ");
+            System.out.println(contact);
         }
         System.out.println();
-        Iterator<Map.Entry<SectionType, Section>> iterator = sections.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<SectionType, Section> entry = iterator.next();
+        Iterator<Map.Entry<SectionType, Section>> sectionIterator = sections.entrySet().iterator();
+        while (sectionIterator.hasNext()) {
+            Map.Entry<SectionType, Section> entry = sectionIterator.next();
             SectionType type = entry.getKey();
             Section section = entry.getValue();
             System.out.println(type.getTitle());
@@ -63,8 +68,8 @@ public class Resume {
         return fullName;
     }
 
-    public void setContact(ContactType type, String content) {
-        contacts.add(new Contact(type, content));
+    public void setContact(ContactType type, String contact) {
+        contacts.put(type, contact);
     }
 
     public void setSection(SectionType type, Section section) {
