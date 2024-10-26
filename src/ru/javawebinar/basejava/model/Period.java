@@ -1,12 +1,14 @@
 package ru.javawebinar.basejava.model;
 
+import java.time.LocalDate;
+
 public class Period {
-    private final String startDate;
-    private final String endDate;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
     private final String position;
     private final String content;
 
-    public Period(String startDate, String endDate, String position, String content) {
+    public Period(LocalDate startDate, LocalDate endDate, String position, String content) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.position = position;
