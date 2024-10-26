@@ -1,9 +1,11 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.util.DateUtil;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static ru.javawebinar.basejava.model.ContactType.*;
@@ -34,7 +36,7 @@ public class ResumeTestData {
                 ACHIEVEMENT,
                 new ListSection(
                         new ArrayList<>(
-                                Arrays.asList(
+                                List.of(
                                         """
                                         Организация команды и успешная реализация Java проектов для сторонних заказчиков:
                                         приложения автопарк на стеке Spring Cloud/микросервисы, система мониторинга показателей
@@ -73,7 +75,7 @@ public class ResumeTestData {
                 QUALIFICATIONS,
                 new ListSection(
                         new ArrayList<>(
-                                Arrays.asList(
+                                List.of(
                                         "JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2",
                                         "Version control: Subversion, Git, Mercury, ClearCase, Perforce",
                                         "DB: PostgreSQL (наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, " +
@@ -109,16 +111,20 @@ public class ResumeTestData {
                 EXPERIENCE,
                 new CompanySection(
                         new ArrayList<>(
-                                Arrays.asList(
+                                List.of(
                                         new Company("Java Online Projects",
-                                                List.of(new Period("10/2013", "Сейчас",
+                                                "https://javaops.ru/",
+                                                List.of(new Period(DateUtil.of(2013, Month.of(10)),
+                                                                LocalDate.now(),
                                                                 "Автор проекта.",
                                                 """
                                                 Создание, организация и проведение Java онлайн проектов и стажировок.""")
                                                 )
                                         ),
                                         new Company("Wrike",
-                                                List.of(new Period("10/2014", "01/2016",
+                                                "https://www.wrike.com/",
+                                                List.of(new Period(DateUtil.of(2014, Month.of(10)),
+                                                                DateUtil.of(2016, Month.of(1)),
                                                                 "Старший разработчик (backend)",
                                                 """
                                                 Проектирование и разработка онлайн платформы управления проектами Wrike
@@ -126,8 +132,9 @@ public class ResumeTestData {
                                                 Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.""")
                                                 )
                                         ),
-                                        new Company("RIT Center",
-                                                List.of(new Period("04/2012", "10/2014",
+                                        new Company("RIT Center", "",
+                                                List.of(new Period(DateUtil.of(2012, Month.of(4)),
+                                                                DateUtil.of(2014, Month.of(10)),
                                                                 "Java архитектор",
                                                 """
                                                 Организация процесса разработки системы ERP для разных окружений:
@@ -142,7 +149,9 @@ public class ResumeTestData {
                                                 )
                                         ),
                                         new Company("Luxoft (Deutsche Bank)",
-                                                List.of(new Period("12/2010", "04/2012",
+                                                "https://www.luxoft.ru/",
+                                                List.of(new Period(DateUtil.of(2010, Month.of(12)),
+                                                                DateUtil.of(2012, Month.of(4)),
                                                                 "Ведущий программист",
                                                 """
                                                 Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC,
@@ -153,7 +162,9 @@ public class ResumeTestData {
                                                 )
                                         ),
                                         new Company("Yota",
-                                                List.of(new Period("06/2008", "12/2010",
+                                                "https://www.yota.ru/",
+                                                List.of(new Period(DateUtil.of(2008, Month.of(6)),
+                                                                DateUtil.of(2010, Month.of(12)),
                                                                 "Ведущий специалист",
                                                 """
                                                 Дизайн и имплементация Java EE фреймворка для отдела "Платежные Системы"
@@ -163,7 +174,9 @@ public class ResumeTestData {
                                                 )
                                         ),
                                         new Company("Enkata",
-                                                List.of(new Period("03/2007", "06/2008",
+                                                "http://enkata.com/",
+                                                List.of(new Period(DateUtil.of(2007, Month.of(3)),
+                                                                DateUtil.of(2008, Month.of(6)),
                                                                 "Разработчик ПО",
                                                 """
                                                 Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0,
@@ -171,7 +184,10 @@ public class ResumeTestData {
                                                 )
                                         ),
                                         new Company("Siemens AG",
-                                                List.of(new Period("01/2005", "02/2007", "Разработчик ПО",
+                                                "https://www.siemens.com/global/en.html",
+                                                List.of(new Period(DateUtil.of(2005, Month.of(1)),
+                                                                DateUtil.of(2007, Month.of(2)),
+                                                                "Разработчик ПО",
                                                 """
                                                  Разработка информационной модели, проектирование интерфейсов,
                                                  реализация и отладка ПО на мобильной IN платформе Siemens @vantage
@@ -179,8 +195,11 @@ public class ResumeTestData {
                                                 )
                                         ),
                                         new Company("Alcatel",
-                                                List.of(new Period("09/1997", "01/2005",
-                                                                "Инженер по аппаратному и программному тестированию",
+                                                "http://www.alcatel.ru/",
+                                                List.of(new Period(DateUtil.of(1997, Month.of(9)),
+                                                                DateUtil.of(2005, Month.of(1)),
+                                                                "Инженер по аппаратному и программному " +
+                                                                        "тестированию",
                                                 """
                                                  Тестирование, отладка, внедрение ПО цифровой телефонной
                                                  станции Alcatel 1000 S12 (CHILL, ASM).""")
@@ -197,36 +216,53 @@ public class ResumeTestData {
                         new ArrayList<>(
                                 List.of(
                                         new Company("Coursera",
-                                                List.of(new Period("03/2013", "05/2013",
-                                                        "'Functional Programming Principles in Scala' by Martin Odersky", "")
+                                                "https://www.coursera.org/course/progfun",
+                                                List.of(new Period(DateUtil.of(2013, Month.of(3)),
+                                                                DateUtil.of(2013, Month.of(5)),
+                                                        "'Functional Programming Principles in Scala' " +
+                                                                "by Martin Odersky", "")
                                                 )
                                         ),
                                         new Company("Luxoft",
-                                                List.of(new Period("03/2011", "04/2011",
-                                                        "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", "")
+                                                "https://www.luxoft-training.ru/training/catalog/course.html?ID=22366",
+                                                List.of(new Period(DateUtil.of(2011, Month.of(3)),
+                                                                DateUtil.of(2011, Month.of(4)),
+                                                        "Курс 'Объектно-ориентированный анализ ИС. " +
+                                                                "Концептуальное моделирование на UML.'", "")
                                                 )
                                         ),
                                         new Company("Siemens AG",
-                                                List.of(new Period("01/2005", "04/2005",
-                                                                "3 месяца обучения мобильным IN сетям (Берлин)", "")
+                                                "http://www.siemens.ru/",
+                                                List.of(new Period(DateUtil.of(2005, Month.of(1)),
+                                                                DateUtil.of(2005, Month.of(4)),
+                                                                "3 месяца обучения мобильным IN сетям " +
+                                                                        "(Берлин)", "")
                                                 )
                                         ),
                                         new Company("Alcatel",
-                                                List.of(new Period("09/1997", "03/1998",
-                                                                "6 месяцев обучения цифровым телефонным сетям (Москва)", "")
+                                                "http://www.alcatel.ru/",
+                                                List.of(new Period(DateUtil.of(1977, Month.of(9)),
+                                                                DateUtil.of(1998, Month.of(3)),
+                                                                "6 месяцев обучения цифровым телефонным " +
+                                                                        "сетям (Москва)", "")
                                                 )
                                         ),
                                         new Company("Санкт-Петербургский национальный исследовательский " +
                                                     "университет информационных технологий, механики и оптики",
-                                                List.of(new Period("09/1993", "07/1996",
+                                                "https://itmo.ru/",
+                                                List.of(new Period(DateUtil.of(1993, Month.of(9)),
+                                                                DateUtil.of(1996, Month.of(7)),
                                                                 "Аспирантура (программист С, С++)", ""),
-                                                new Period("09/1987", "07/1993",
+                                                new Period(DateUtil.of(1987, Month.of(9)),
+                                                        DateUtil.of(1993, Month.of(7)),
                                                         "Инженер (программист Fortran, C)", "")
                                                 )
                                         ),
                                         new Company(
                                                 "Заочная физико-техническая школа при МФТИ",
-                                                List.of(new Period("09/1984", "06/1987",
+                                                "https://mipt.ru/",
+                                                List.of(new Period(DateUtil.of(1984, Month.of(9)),
+                                                        DateUtil.of(1987, Month.of(6)),
                                                         "Закончил с отличием", "")
                                                 )
                                         )
@@ -235,6 +271,123 @@ public class ResumeTestData {
                 )
         );
         }
+
+    public static Resume createResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        resume.setContact(PHONE, "+0123456789");
+        resume.setContact(SKYPE, "skype");
+        resume.setContact(MAIL, "mail");
+        resume.setContact(LINKEDIN_PROFILE, "linkedin");
+        resume.setContact(GITHUB_PROFILE, "github");
+        resume.setContact(STACKOVERFLOW_PROFILE, "stackoverflow");
+        resume.setContact(HOME_PAGE, "home page");
+
+        resume.setSection(
+                OBJECTIVE,
+                new TextSection(
+                        "objective"));
+
+        resume.setSection(
+                PERSONAL,
+                new TextSection(
+                        "personal"));
+
+        resume.setSection(
+                ACHIEVEMENT,
+                new ListSection(
+                        new ArrayList<>(
+                                List.of("achievement0", "achievement1", "achievement3")
+                        )
+                )
+        );
+
+        resume.setSection(
+                QUALIFICATIONS,
+                new ListSection(
+                        new ArrayList<>(
+                                List.of("qualification0", "qualification1", "qualification2")
+                        )
+                )
+        );
+
+        resume.setSection(
+                EXPERIENCE,
+                new CompanySection(
+                        new ArrayList<>(
+                                List.of(
+                                        new Company("company0",
+                                                "https://company0.com",
+                                                List.of(new Period(DateUtil.of(2015, Month.of(10)),
+                                                        DateUtil.of(2017, Month.of(3)),
+                                                        "position0",
+                                                        "content0")
+                                                )
+                                        ),
+                                        new Company("company1",
+                                                "https://company1.com",
+                                                List.of(new Period(DateUtil.of(2017, Month.of(4)),
+                                                        DateUtil.of(2019, Month.of(8)),
+                                                        "position1",
+                                                        "content1"),
+                                                        new Period(DateUtil.of(2019, Month.of(9)),
+                                                                DateUtil.of(2020, Month.of(12)),
+                                                                "position1.1",
+                                                                "content1.1")
+                                                )
+                                        ),
+                                        new Company("company2",
+                                                "https://company2.com",
+                                                List.of(new Period(DateUtil.of(2021, Month.of(2)),
+                                                        DateUtil.of(2022, Month.of(8)),
+                                                                "position2",
+                                                                "content2")
+                                                )
+                                        )
+                                )
+                        )
+                )
+
+        );
+
+        resume.setSection(
+                EDUCATION,
+                new CompanySection(
+                        new ArrayList<>(
+                                List.of(
+                                        new Company("company0",
+                                                "https://company0/edu.com",
+                                                List.of(new Period(DateUtil.of(2015, Month.of(10)),
+                                                        DateUtil.of(2017, Month.of(3)),
+                                                        "position0.edu",
+                                                        "content0.edu")
+                                                )
+                                        ),
+                                        new Company("company1",
+                                                "https://company1/edu.com",
+                                                List.of(new Period(DateUtil.of(2017, Month.of(4)),
+                                                                DateUtil.of(2019, Month.of(8)),
+                                                                "position1.edu",
+                                                                "content1.edu"),
+                                                        new Period(DateUtil.of(2019, Month.of(9)),
+                                                                DateUtil.of(2020, Month.of(12)),
+                                                                "position1.1.edu",
+                                                                "content1.1.edu")
+                                                )
+                                        ),
+                                        new Company("company2",
+                                                "https://company2/edu.com",
+                                                List.of(new Period(DateUtil.of(2021, Month.of(2)),
+                                                        DateUtil.of(2022, Month.of(8)),
+                                                        "position2.edu",
+                                                        "content2.edu")
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+    return resume;
+    }
 
     public static void main(String[] args) {
         System.out.println(RESUME);
