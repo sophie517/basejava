@@ -5,10 +5,12 @@ import java.util.*;
 public class Company {
     private final String name;
     private final List<Period> periods;
+    private final Link link;
 
-    public Company(String name, List<Period> periods) {
+    public Company(String name, String url, List<Period> periods) {
         this.name = name;
         this.periods = periods;
+        this.link = new Link(name, url);
     }
 
     @Override
@@ -28,7 +30,7 @@ public class Company {
 
     @Override
     public String toString() {
-        System.out.println(name);
+        System.out.println(link);
         for (Period period : periods) {
             System.out.println(period);
         }
