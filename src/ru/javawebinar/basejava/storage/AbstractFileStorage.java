@@ -25,11 +25,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void clearResumes() {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                deleteResume(file);
-            }
+        File[] files = getFilesList();
+        for (File file : files) {
+            file.delete();
         }
     }
 
@@ -67,22 +65,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void deleteResume(File file) {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                if (f == file) {
-                    deleteResume(file);
-                }
-            }
-        }
+        file.delete();
     }
 
     @Override
     protected List<Resume> getAllResumes() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("Directory is null", directory.getName());
-        }
+        File[] files = getFilesList();
         List<Resume> resumes = new ArrayList<>();
         for (File file : files) {
             if (file.isFile()) {
@@ -94,8 +82,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected int getSize() {
+        File[] files = getFilesList();
+        return files.length;
+    }
+
+    private File[] getFilesList() {
         File[] files = directory.listFiles();
-        return files == null ? 0 : files.length;
+        if (files == null) {
+            throw new StorageException("Null directory ", directory.getName());
+        }
+        return files;
     }
 
     @Override
@@ -107,4 +103,5 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected File getSearchKey(String uuid) {
         return new File(directory, uuid);
     }
+
 }
