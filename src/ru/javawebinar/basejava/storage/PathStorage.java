@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.serialization.SerializationStrategy;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,15 +14,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
+    private final SerializationStrategy strategy;
 
-    protected AbstractPathStorage(String dir) {
+    protected PathStorage(String dir, SerializationStrategy strategy) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
+        this.strategy = strategy;
     }
 
     @Override
@@ -36,7 +39,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateResume(Path path, Resume resume) {
         try (OutputStream os = Files.newOutputStream(path)) {
-            writeResume(os, resume);
+            strategy.writeResume(os, resume);
         } catch (IOException e) {
             throw new StorageException("IO error while updating resume in file ", path.toString(), e);
         }
@@ -47,25 +50,21 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(path);
             try (OutputStream os = Files.newOutputStream(path)) {
-                writeResume(os, resume);
+                strategy.writeResume(os, resume);
             }
         } catch (IOException e) {
             throw new StorageException("IO error while saving resume in file ", path.toString(), e);
         }
     }
 
-    protected abstract void writeResume(OutputStream os, Resume resume) throws IOException;
-
     @Override
     protected Resume getResume(Path path) {
         try (InputStream is = Files.newInputStream(path)) {
-            return readResume(is);
+            return strategy.readResume(is);
         } catch (IOException e) {
             throw new StorageException("IO error while reading resume from file ", path.toString(), e);
         }
     }
-
-    protected abstract Resume readResume(InputStream is) throws IOException;
 
     @Override
     protected void deleteResume(Path path) {
