@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.serialization.SerializationStrategy;
+import ru.javawebinar.basejava.storage.serialization.SerializationStrategy;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
@@ -29,11 +30,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected void clearResumes() {
-        try {
-            Files.list(directory).forEach(this::deleteResume);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error", null);
-        }
+        getFilesList().forEach(this::deleteResume);
     }
 
     @Override
@@ -49,9 +46,7 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void saveResume(Path path, Resume resume) {
         try {
             Files.createFile(path);
-            try (OutputStream os = Files.newOutputStream(path)) {
-                strategy.writeResume(os, resume);
-            }
+            updateResume(path, resume);
         } catch (IOException e) {
             throw new StorageException("IO error while saving resume in file ", path.toString(), e);
         }
@@ -77,22 +72,22 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getAllResumes() {
-        try {
-            return Files.list(directory)
-                    .filter(Files::isRegularFile)
-                    .map(this::getResume)
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new StorageException("IO error while getting files from directory ", directory.toString(), e);
-        }
+        return getFilesList()
+                .filter(Files::isRegularFile)
+                .map(this::getResume)
+                .collect(Collectors.toList());
     }
 
     @Override
     protected int getSize() {
+        return (int) getFilesList().count();
+    }
+
+    private Stream<Path> getFilesList() {
         try {
-            return (int) Files.list(directory).count();
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("IO error while getting directory size ", directory.toString(), e);
+            throw new StorageException("IO error while getting files from directory ", directory.toString(), e);
         }
     }
 

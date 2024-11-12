@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.serialization.SerializationStrategy;
+import ru.javawebinar.basejava.storage.serialization.SerializationStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class FileStorage extends AbstractStorage<File> {
     protected void saveResume(File file, Resume resume) {
         try {
             file.createNewFile();
-            strategy.writeResume(new BufferedOutputStream(new FileOutputStream(file)), resume);
+            updateResume(file, resume);
         } catch (IOException e) {
             throw new StorageException("IO error while saving resume in file ", file.getName(), e);
         }
