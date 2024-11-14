@@ -46,10 +46,10 @@ public class FileStorage extends AbstractStorage<File> {
     protected void saveResume(File file, Resume resume) {
         try {
             file.createNewFile();
-            updateResume(file, resume);
         } catch (IOException e) {
             throw new StorageException("IO error while saving resume in file ", file.getName(), e);
         }
+        updateResume(file, resume);
     }
 
     @Override

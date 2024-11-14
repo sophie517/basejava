@@ -46,10 +46,10 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void saveResume(Path path, Resume resume) {
         try {
             Files.createFile(path);
-            updateResume(path, resume);
         } catch (IOException e) {
             throw new StorageException("IO error while saving resume in file ", path.toString(), e);
         }
+        updateResume(path, resume);
     }
 
     @Override
