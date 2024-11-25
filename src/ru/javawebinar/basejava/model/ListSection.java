@@ -7,7 +7,10 @@ public class ListSection extends Section {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final List<String> elements;
+    private List<String> elements;
+
+    public ListSection() {
+    }
 
     public ListSection(List<String> elements) {
         this.elements = elements;
@@ -31,5 +34,9 @@ public class ListSection extends Section {
             System.out.println("- " + element);
         }
         return "";
+    }
+
+    public List<String> getElements() {
+        return elements;
     }
 }

@@ -1,16 +1,34 @@
 package ru.javawebinar.basejava.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Company implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final String name;
-    private final List<Period> periods;
-    private final Link link;
+    private String name;
+    private List<Period> periods;
+    private Link link;
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Period> getPeriods() {
+        return periods;
+    }
+
+    public Link getLink() {
+        return link;
+    }
+
+    public Company() {
+    }
 
     public Company(String name, String url, List<Period> periods) {
         this.name = name;
@@ -41,4 +59,6 @@ public class Company implements Serializable {
         }
         return "";
     }
+
+
 }

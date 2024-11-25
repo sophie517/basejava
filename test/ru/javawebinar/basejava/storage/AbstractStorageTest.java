@@ -14,7 +14,6 @@ public abstract class AbstractStorageTest {
     protected final Storage storage;
 
     protected static final File STORAGE_DIR = new File("/Users/sonya/IdeaProjects/basejava/storage");
-    protected static final String STRING_STORAGE_DIR = "/Users/sonya/IdeaProjects/basejava/storage";
 
     private static final String UUID_0 = "uuid0";
     private static final String UUID_1 = "uuid1";

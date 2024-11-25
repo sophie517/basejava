@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamSerialization implements SerializationStrategy {
+public class ObjectStreamSerializer implements SerializationStrategy {
     @Override
     public void writeResume(OutputStream os, Resume resume) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
@@ -20,6 +20,5 @@ public class ObjectStreamSerialization implements SerializationStrategy {
         } catch (ClassNotFoundException e) {
             throw new StorageException("Error while reading resume ", null, e);
         }
-
     }
 }

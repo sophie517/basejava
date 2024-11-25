@@ -7,7 +7,10 @@ public class CompanySection extends Section {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final List<Company> companies;
+    private List<Company> companies;
+
+    public CompanySection() {
+    }
 
     public CompanySection(List<Company> companies) {
         this.companies = companies;
@@ -30,5 +33,9 @@ public class CompanySection extends Section {
             System.out.println(company);
         }
         return "";
+    }
+
+    public List<Company> getCompanies() {
+        return companies;
     }
 }
