@@ -25,6 +25,7 @@ public class DataStreamSerializer implements SerializationStrategy {
             writeWithException(sections.entrySet(), dos, entry -> {
                 SectionType sectionType = SectionType.valueOf(entry.getKey().name());
                 dos.writeUTF(sectionType.toString());
+                dos.writeUTF(sectionType.toString());
                 Section section = entry.getValue();
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> dos.writeUTF(section.toString());
@@ -65,43 +66,32 @@ public class DataStreamSerializer implements SerializationStrategy {
                     () -> ContactType.valueOf(dis.readUTF()), dis::readUTF);
             contacts.forEach(resume::setContact);
 
-            int sectionsSize = dis.readInt();
-            for (int i = 0; i < sectionsSize; i++) {
-                SectionType type = SectionType.valueOf(dis.readUTF());
+            Map<SectionType, Section> sections = readWithException(dis,
+                    () -> SectionType.valueOf(dis.readUTF()),
+                    () -> {
+                        SectionType type = SectionType.valueOf(dis.readUTF());
 
-                switch (type) {
-                    case PERSONAL, OBJECTIVE -> {
-                        String content = dis.readUTF();
-                        resume.setSection(type, new TextSection(content));
-                    }
+                        return switch (type) {
+                            case PERSONAL, OBJECTIVE -> new TextSection(dis.readUTF());
 
-                    case ACHIEVEMENT, QUALIFICATIONS -> {
-                        List<String> items = readWithException(dis, dis::readUTF);
-                        resume.setSection(type, new ListSection(items));
-                    }
+                            case ACHIEVEMENT, QUALIFICATIONS -> new ListSection(readWithException(dis, dis::readUTF));
 
-                    case EXPERIENCE, EDUCATION -> {
-                        List<Company> companies = readWithException(dis, () -> {
-                            String name = dis.readUTF();
-                            String url = dis.readUTF();
+                            case EXPERIENCE, EDUCATION -> new CompanySection(readWithException(dis, () -> {
+                                String name = dis.readUTF();
+                                String url = dis.readUTF();
 
-                            List<Period> periods = readWithException(dis, () -> {
-                                LocalDate startDate = LocalDate.parse(dis.readUTF());
-                                LocalDate endDate = LocalDate.parse(dis.readUTF());
-                                String position = dis.readUTF();
-                                String description = dis.readUTF();
-                                return new Period(startDate, endDate, position, description);
-                            });
-                            return new Company(name, url, periods);
-                        });
-                        resume.setSection(type, new CompanySection(companies));
-                    }
-
-                    default ->
-                        throw new IOException("Unknown section type to read: " + type);
-
-                }
-            }
+                                List<Period> periods = readWithException(dis, () -> {
+                                    LocalDate startDate = LocalDate.parse(dis.readUTF());
+                                    LocalDate endDate = LocalDate.parse(dis.readUTF());
+                                    String position = dis.readUTF();
+                                    String description = dis.readUTF();
+                                    return new Period(startDate, endDate, position, description);
+                                });
+                                return new Company(name, url, periods);
+                            }));
+                        };
+                    });
+            sections.forEach(resume::setSection);
             return resume;
         }
     }
