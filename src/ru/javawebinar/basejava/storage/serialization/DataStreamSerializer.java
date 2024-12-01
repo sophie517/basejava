@@ -2,13 +2,11 @@ package ru.javawebinar.basejava.storage.serialization;
 
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.util.ThrowingExceptionConsumer;
+import ru.javawebinar.basejava.util.ThrowingExceptionSupplier;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamSerializer implements SerializationStrategy {
     @Override
@@ -18,14 +16,12 @@ public class DataStreamSerializer implements SerializationStrategy {
             dos.writeUTF(resume.getFullName());
 
             Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
             writeWithException(contacts.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             });
 
             Map<SectionType, Section> sections = resume.getSections();
-            dos.writeInt(sections.size());
             writeWithException(sections.entrySet(), dos, entry -> {
                 SectionType sectionType = SectionType.valueOf(entry.getKey().name());
                 dos.writeUTF(sectionType.toString());
@@ -34,20 +30,15 @@ public class DataStreamSerializer implements SerializationStrategy {
                     case PERSONAL, OBJECTIVE -> dos.writeUTF(section.toString());
                     case ACHIEVEMENT, QUALIFICATIONS -> {
                         List<String> elements = ((ListSection) section).getElements();
-                        dos.writeInt(elements.size());
-                        for (String element : elements) {
-                            dos.writeUTF(element);
-                        }
+                        writeWithException(elements, dos, dos::writeUTF);
                     }
                     case EXPERIENCE, EDUCATION -> {
                         List<Company> companies = ((CompanySection) section).getCompanies();
-                        dos.writeInt(companies.size());
                         writeWithException(companies, dos, company -> {
                             dos.writeUTF(company.getName());
                             dos.writeUTF(String.valueOf(company.getLink()));
 
                             List<Period> periods = company.getPeriods();
-                            dos.writeInt(periods.size());
                             writeWithException(periods, dos, period -> {
                                 dos.writeUTF(period.getStartDate().toString());
                                 dos.writeUTF(period.getEndDate().toString());
@@ -70,10 +61,9 @@ public class DataStreamSerializer implements SerializationStrategy {
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
 
-            int contactsSize = dis.readInt();
-            for (int i = 0; i < contactsSize; i++) {
-                resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
+            Map<ContactType, String> contacts = readWithException(dis,
+                    () -> ContactType.valueOf(dis.readUTF()), dis::readUTF);
+            contacts.forEach(resume::setContact);
 
             int sectionsSize = dis.readInt();
             for (int i = 0; i < sectionsSize; i++) {
@@ -86,32 +76,24 @@ public class DataStreamSerializer implements SerializationStrategy {
                     }
 
                     case ACHIEVEMENT, QUALIFICATIONS -> {
-                        int listSize = dis.readInt();
-                        List<String> items = new ArrayList<>();
-                        for (int j = 0; j < listSize; j++) {
-                            items.add(dis.readUTF());
-                        }
+                        List<String> items = readWithException(dis, dis::readUTF);
                         resume.setSection(type, new ListSection(items));
                     }
 
                     case EXPERIENCE, EDUCATION -> {
-                        int companiesSize = dis.readInt();
-                        List<Company> companies = new ArrayList<>();
-                        for (int j = 0; j < companiesSize; j++) {
+                        List<Company> companies = readWithException(dis, () -> {
                             String name = dis.readUTF();
                             String url = dis.readUTF();
-                            List<Period> periods = new ArrayList<>();
 
-                            int periodsSize = dis.readInt();
-                            for (int k = 0; k < periodsSize; k++) {
+                            List<Period> periods = readWithException(dis, () -> {
                                 LocalDate startDate = LocalDate.parse(dis.readUTF());
                                 LocalDate endDate = LocalDate.parse(dis.readUTF());
                                 String position = dis.readUTF();
                                 String description = dis.readUTF();
-                                periods.add(new Period(startDate, endDate, position, description));
-                            }
-                            companies.add(new Company(name, url, periods));
-                        }
+                                return new Period(startDate, endDate, position, description);
+                            });
+                            return new Company(name, url, periods);
+                        });
                         resume.setSection(type, new CompanySection(companies));
                     }
 
@@ -126,9 +108,33 @@ public class DataStreamSerializer implements SerializationStrategy {
 
     public static <T> void writeWithException(Collection<T> collection, DataOutputStream dos,
                                               ThrowingExceptionConsumer<T> consumer) throws IOException {
+        dos.writeInt(collection.size());
         for (T element : collection) {
             consumer.accept(element);
         }
+    }
+
+    public static <T> List<T> readWithException(DataInputStream dis,
+                                              ThrowingExceptionSupplier<T> supplier) throws IOException {
+        int size = dis.readInt();
+        List<T> collection = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            collection.add(supplier.get());
+        }
+        return collection;
+    }
+
+    public static <K, V> Map<K, V> readWithException(DataInputStream dis,
+                                                     ThrowingExceptionSupplier<K> keySupplier,
+                                                     ThrowingExceptionSupplier<V> valueSupplier) throws IOException {
+        int size = dis.readInt();
+        Map<K, V> collection = new LinkedHashMap<>(size);
+        for (int i = 0; i < size; i++) {
+            K key = keySupplier.get();
+            V value = valueSupplier.get();
+            collection.put(key, value);
+        }
+        return collection;
     }
 }
 
