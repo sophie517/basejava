@@ -3,6 +3,7 @@ package ru.javawebinar.basejava.storage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
@@ -13,14 +14,21 @@ import java.util.List;
 public abstract class AbstractStorageTest {
     protected final Storage storage;
 
-    protected static final File STORAGE_DIR = new File("/Users/sonya/IdeaProjects/basejava/storage");
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
     private static final String UUID_0 = "uuid0";
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
+
+    private static final Resume RESUME_0 = new Resume(UUID_0, "name0");
+    private static final Resume RESUME_1  = new Resume(UUID_1, "name1");
+    private static final Resume RESUME_2 = new Resume(UUID_2, "name2");
+
+    /*
     private static final Resume RESUME_0 = ResumeTestData.createResume(UUID_0, "name0");
     private static final Resume RESUME_1 = ResumeTestData.createResume(UUID_1, "name1");
     private static final Resume RESUME_2 = ResumeTestData.createResume(UUID_2, "name2");
+    */
 
     private static final String UUID_NOT_EXIST = "dummy";
 

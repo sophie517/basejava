@@ -41,38 +41,25 @@ public class Resume implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Resume resume = (Resume) o;
-
-        return uuid.equals(resume.uuid) && fullName.equals(resume.fullName);
+        return Objects.equals(uuid, resume.uuid) &&
+                Objects.equals(fullName, resume.fullName) &&
+                Objects.equals(contacts, resume.contacts) &&
+                Objects.equals(sections, resume.sections);
     }
 
     public int hashCode() {
-        int hashCode = uuid.hashCode();
-        hashCode = 31 * hashCode + fullName.hashCode();
-        hashCode = 31 * hashCode + contacts.hashCode();
-        hashCode = 31 * hashCode + sections.hashCode();
-        return hashCode;
+        return Objects.hash(uuid, fullName, contacts, sections);
     }
 
     @Override
     public String toString() {
-        System.out.println(fullName + "\n");
-        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-            ContactType type = entry.getKey();
-            String contact = entry.getValue();
-            System.out.print(type.getTitle() + ": ");
-            System.out.println(contact);
-        }
-        System.out.println();
-
-        for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-            SectionType type = entry.getKey();
-            Section section = entry.getValue();
-            System.out.println(type.getTitle());
-            System.out.println(section.toString());
-        }
-        return "";
+        return "Resume {" +
+                "uuid = '" + uuid + '\'' +
+                ", fullName = '" + fullName + '\'' +
+                ", contacts = " + contacts +
+                ", sections = " + sections +
+                '}';
     }
 
     public String getFullName() {
