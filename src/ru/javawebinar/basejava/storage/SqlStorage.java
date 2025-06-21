@@ -26,6 +26,9 @@ public class SqlStorage implements Storage {
             ps.setString(1, r.getFullName());
             ps.setString(2, r.getUuid());
             ps.executeUpdate();
+            if (ps.getUpdateCount() == 0) {
+                throw new NotExistStorageException(r.getUuid());
+            }
             return null;
         });
     }
@@ -57,6 +60,9 @@ public class SqlStorage implements Storage {
         sqlHelper.execute("DELETE FROM resume r WHERE r.uuid = ?", ps -> {
             ps.setString(1, uuid);
             ps.executeUpdate();
+            if (ps.getUpdateCount() == 0) {
+                throw new NotExistStorageException(uuid);
+            }
             return null;
         });
     }
