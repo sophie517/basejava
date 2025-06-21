@@ -1,5 +1,8 @@
 package ru.javawebinar.basejava.sql;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.StorageException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -31,8 +34,16 @@ public class SqlHelper {
             LOG.info("Executing: " + sql);
             return executor.execute(ps);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            isDuplicateKeyError(e);
         }
+        return null;
+    }
+
+    public static void isDuplicateKeyError(SQLException e) {
+        if (e.getSQLState().equals("23505")) {
+            throw  new ExistStorageException(null);
+        }
+        throw  new StorageException(e);
     }
 
     public interface  SqlExecutor<T> {
