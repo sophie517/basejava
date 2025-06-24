@@ -23,7 +23,7 @@ public class SqlHelper {
             LOG.info("Executing: " + sql);
             ps.execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new StorageException(e);
         }
     }
 
@@ -41,9 +41,9 @@ public class SqlHelper {
 
     public static void isDuplicateKeyError(SQLException e) {
         if (e.getSQLState().equals("23505")) {
-            throw  new ExistStorageException(null);
+            throw new ExistStorageException(e.getMessage());
         }
-        throw  new StorageException(e);
+        throw new StorageException(e);
     }
 
     public interface  SqlExecutor<T> {
