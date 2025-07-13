@@ -20,15 +20,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
 
-    private static final Resume RESUME_0 = new Resume(UUID_0, "name0");
-    private static final Resume RESUME_1  = new Resume(UUID_1, "name1");
-    private static final Resume RESUME_2 = new Resume(UUID_2, "name2");
-
-    /*
     private static final Resume RESUME_0 = ResumeTestData.createResume(UUID_0, "name0");
     private static final Resume RESUME_1 = ResumeTestData.createResume(UUID_1, "name1");
     private static final Resume RESUME_2 = ResumeTestData.createResume(UUID_2, "name2");
-    */
+
 
     private static final String UUID_NOT_EXIST = "dummy";
 

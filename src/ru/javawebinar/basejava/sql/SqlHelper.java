@@ -39,6 +39,23 @@ public class SqlHelper {
         return null;
     }
 
+    public <T> T transactionalExecute(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = executor.execute(conn);
+                conn.commit();
+                return res;
+            } catch (SQLException e) {
+                conn.rollback();
+                isDuplicateKeyError(e);
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
+        return null;
+    }
+
     public static void isDuplicateKeyError(SQLException e) {
         if (e.getSQLState().equals("23505")) {
             throw new ExistStorageException(e.getMessage());
@@ -48,5 +65,9 @@ public class SqlHelper {
 
     public interface  SqlExecutor<T> {
         T execute(PreparedStatement ps) throws SQLException;
+    }
+
+    public interface SqlTransaction<T> {
+        T execute(Connection conn) throws SQLException;
     }
 }

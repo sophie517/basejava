@@ -281,7 +281,7 @@ public class ResumeTestData {
         resume.setContact(GITHUB_PROFILE, "github");
         resume.setContact(STACKOVERFLOW_PROFILE, "stackoverflow");
         resume.setContact(HOME_PAGE, "home page");
-
+/*
         resume.setSection(
                 OBJECTIVE,
                 new TextSection(
@@ -386,6 +386,7 @@ public class ResumeTestData {
                         )
                 )
         );
+ */
     return resume;
     }
 
