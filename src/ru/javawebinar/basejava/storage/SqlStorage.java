@@ -52,27 +52,25 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.transactionalExecute(conn -> {
-            Resume r;
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume WHERE uuid = ?")) {
+        Resume r = sqlHelper.execute("SELECT * FROM resume WHERE uuid = ?", ps -> {
                 ps.setString(1, uuid);
                 ResultSet rs = ps.executeQuery();
                 if (!rs.next()) {
                     throw new NotExistStorageException(uuid);
                 }
-                r = new Resume(uuid, rs.getString("full_name"));
-            }
+                return new Resume(uuid, rs.getString("full_name"));
+        });
 
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid = ?")) {
+        sqlHelper.execute("SELECT * FROM contact WHERE resume_uuid = ?", ps -> {
                 ps.setString(1, uuid);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     addContactFromResultSet(r, rs);
                 }
-            }
-
-            return r;
+            return null;
         });
+
+        return r;
     }
 
     @Override
@@ -88,26 +86,25 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.transactionalExecute(conn -> {
-            Map<String, Resume> resumes;
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
+        Map<String, Resume> resumes = sqlHelper.execute("SELECT * FROM resume ORDER BY full_name, uuid", ps -> {
                 ResultSet rs = ps.executeQuery();
-                resumes = new LinkedHashMap<>();
+                Map<String, Resume> result = new LinkedHashMap<>();
                 while (rs.next()) {
                     String uuid = rs.getString("uuid");
                     String fullName = rs.getString("full_name");
-                    resumes.put(uuid, new Resume(uuid, fullName));
+                    result.put(uuid, new Resume(uuid, fullName));
                 }
-            }
 
-            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact")) {
+                return result;
+        });
+
+        return sqlHelper.execute("SELECT * FROM contact", ps -> {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     String resume_uuid = rs.getString("resume_uuid");
                     Resume r = resumes.get(resume_uuid);
                     addContactFromResultSet(r, rs);
                 }
-            }
 
             return new ArrayList<>(resumes.values());
         });
