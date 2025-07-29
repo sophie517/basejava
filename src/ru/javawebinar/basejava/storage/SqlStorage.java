@@ -1,8 +1,7 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.*;
@@ -32,7 +31,9 @@ public class SqlStorage implements Storage {
             }
 
             deleteContacts(r, conn);
+            deleteSections(r, conn);
             insertContact(r, conn);
+            insertSection(r, conn);
             return null;
         });
     }
@@ -46,6 +47,7 @@ public class SqlStorage implements Storage {
                 ps.execute();
             }
             insertContact(r, conn);
+            insertSection(r, conn);
             return null;
         });
     }
@@ -67,6 +69,15 @@ public class SqlStorage implements Storage {
                 while (rs.next()) {
                     addContactFromResultSet(r, rs);
                 }
+            return null;
+        });
+
+        sqlHelper.execute("SELECT * FROM section WHERE resume_uuid = ?", ps -> {
+            ps.setString(1, uuid);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                addSectionFromResultSet(r, rs);
+            }
             return null;
         });
 
@@ -98,13 +109,23 @@ public class SqlStorage implements Storage {
                 return result;
         });
 
-        return sqlHelper.execute("SELECT * FROM contact", ps -> {
+         sqlHelper.execute("SELECT * FROM contact", ps -> {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     String resume_uuid = rs.getString("resume_uuid");
                     Resume r = resumes.get(resume_uuid);
                     addContactFromResultSet(r, rs);
                 }
+                return null;
+        });
+
+        return sqlHelper.execute("SELECT * FROM section", ps -> {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String resume_uuid = rs.getString("resume_uuid");
+                Resume r = resumes.get(resume_uuid);
+                addSectionFromResultSet(r, rs);
+            }
 
             return new ArrayList<>(resumes.values());
         });
@@ -129,6 +150,13 @@ public class SqlStorage implements Storage {
 
     }
 
+    private void deleteSections(Resume r, Connection conn) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM section WHERE resume_uuid = ?")) {
+            ps.setString(1, r.getUuid());
+            ps.execute();
+        }
+    }
+
     private void insertContact(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, info) VALUES (?, ?, ?)")) {
             for (Map.Entry<ContactType, String> entry : r.getContacts().entrySet()) {
@@ -141,12 +169,50 @@ public class SqlStorage implements Storage {
         }
     }
 
+    private void insertSection(Resume r, Connection conn) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, content) VALUES (?, ?, ?)")) {
+            for (Map.Entry<SectionType, Section> entry : r.getSections().entrySet()) {
+                ps.setString(1, r.getUuid());
+                ps.setString(2, entry.getKey().name());
+
+                Section section = entry.getValue();
+                String content;
+                if (section instanceof TextSection) {
+                    content = section.toString();
+                } else if (section instanceof ListSection) {
+                    content = String.join("\n", ((ListSection) section).getElements());
+                } else {
+                    throw new IllegalArgumentException("Unsupported section type: " + section.getClass());
+                }
+
+                ps.setString(3, content);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
+    }
+
     private void addContactFromResultSet(Resume r, ResultSet rs) throws SQLException {
         String info = rs.getString("info");
         String type = rs.getString("type");
 
         if (type != null && info != null) {
             r.setContact(ContactType.valueOf(rs.getString("type")), info);
+        }
+    }
+
+    private void addSectionFromResultSet(Resume r, ResultSet rs) throws SQLException {
+        String content = rs.getString("content");
+
+        if (content != null) {
+            SectionType type = SectionType.valueOf(rs.getString("type"));
+            Section section = switch (type) {
+                case PERSONAL, OBJECTIVE -> new TextSection(content);
+                case ACHIEVEMENT, QUALIFICATIONS -> new ListSection(List.of(content.split("\n")));
+                default -> throw new IllegalArgumentException("Unsupported section type: " + type);
+            };
+
+            r.setSection(type, section);
         }
     }
 }

@@ -31,7 +31,7 @@ public class ListSection extends Section {
 
     public String toString() {
         for (String element : elements) {
-            System.out.println("- " + element);
+            System.out.println(element);
         }
         return "";
     }

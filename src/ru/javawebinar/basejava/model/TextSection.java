@@ -32,6 +32,6 @@ public class TextSection extends Section {
     }
 
     public String toString() {
-        return content + "\n";
+        return content;
     }
 }

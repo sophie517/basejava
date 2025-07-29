@@ -281,7 +281,7 @@ public class ResumeTestData {
         resume.setContact(GITHUB_PROFILE, "github");
         resume.setContact(STACKOVERFLOW_PROFILE, "stackoverflow");
         resume.setContact(HOME_PAGE, "home page");
-/*
+
         resume.setSection(
                 OBJECTIVE,
                 new TextSection(
@@ -296,7 +296,7 @@ public class ResumeTestData {
                 ACHIEVEMENT,
                 new ListSection(
                         new ArrayList<>(
-                                List.of("achievement0", "achievement1", "achievement3")
+                                List.of("achievement0", "achievement1", "achievement2")
                         )
                 )
         );
@@ -309,7 +309,7 @@ public class ResumeTestData {
                         )
                 )
         );
-
+/*
         resume.setSection(
                 EXPERIENCE,
                 new CompanySection(
@@ -386,7 +386,7 @@ public class ResumeTestData {
                         )
                 )
         );
- */
+*/
     return resume;
     }
 

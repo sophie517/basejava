@@ -10,11 +10,10 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    private static final File PROPS = new File("cofig/resumes.properties");
+    private static final File PROPS = new File("/Users/sonya/IdeaProjects/basejava/config/resumes.properties");
     private static final Config INSTANCE = new Config();
 
     private final Storage storage;
-    private final Properties props = new Properties();
     private final File storageDir;
 
     public static Config get() {
@@ -23,6 +22,7 @@ public class Config {
 
     private Config() {
         try (InputStream is = new FileInputStream(PROPS)) {
+            Properties props = new Properties();
             props.load(is);
             storageDir = new File(props.getProperty("storage.dir"));
             storage = new SqlStorage(props.getProperty("db.url"),  props.getProperty("db.user"), props.getProperty("db.password"));
