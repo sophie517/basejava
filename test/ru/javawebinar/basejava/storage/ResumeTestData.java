@@ -309,7 +309,7 @@ public class ResumeTestData {
                         )
                 )
         );
-/*
+
         resume.setSection(
                 EXPERIENCE,
                 new CompanySection(
@@ -386,7 +386,7 @@ public class ResumeTestData {
                         )
                 )
         );
-*/
+
     return resume;
     }
 

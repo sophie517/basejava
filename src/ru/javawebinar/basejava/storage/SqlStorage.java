@@ -3,6 +3,7 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
+import ru.javawebinar.basejava.util.JsonParser;
 
 import java.sql.*;
 import java.util.*;
@@ -143,19 +144,21 @@ public class SqlStorage implements Storage {
     }
 
     private void deleteContacts(Resume r, Connection conn) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid = ?")) {
-            ps.setString(1, r.getUuid());
-            ps.execute();
-        }
+        deleteAttributes(r, conn, "DELETE FROM contact WHERE resume_uuid = ?");
 
     }
 
     private void deleteSections(Resume r, Connection conn) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM section WHERE resume_uuid = ?")) {
+        deleteAttributes(r, conn, "DELETE  FROM section WHERE resume_uuid = ?");
+    }
+
+    private void deleteAttributes(Resume r, Connection conn, String sql) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, r.getUuid());
             ps.execute();
         }
     }
+
 
     private void insertContact(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, info) VALUES (?, ?, ?)")) {
@@ -170,22 +173,12 @@ public class SqlStorage implements Storage {
     }
 
     private void insertSection(Resume r, Connection conn) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, content) VALUES (?, ?, ?)")) {
-            for (Map.Entry<SectionType, Section> entry : r.getSections().entrySet()) {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, content) VALUES (?,?,?)")) {
+            for (Map.Entry<SectionType, Section> e : r.getSections().entrySet()) {
                 ps.setString(1, r.getUuid());
-                ps.setString(2, entry.getKey().name());
-
-                Section section = entry.getValue();
-                String content;
-                if (section instanceof TextSection) {
-                    content = section.toString();
-                } else if (section instanceof ListSection) {
-                    content = String.join("\n", ((ListSection) section).getElements());
-                } else {
-                    throw new IllegalArgumentException("Unsupported section type: " + section.getClass());
-                }
-
-                ps.setString(3, content);
+                ps.setString(2, e.getKey().name());
+                Section section = e.getValue();
+                ps.setString(3, JsonParser.write(section, Section.class));
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -206,13 +199,7 @@ public class SqlStorage implements Storage {
 
         if (content != null) {
             SectionType type = SectionType.valueOf(rs.getString("type"));
-            Section section = switch (type) {
-                case PERSONAL, OBJECTIVE -> new TextSection(content);
-                case ACHIEVEMENT, QUALIFICATIONS -> new ListSection(List.of(content.split("\n")));
-                default -> throw new IllegalArgumentException("Unsupported section type: " + type);
-            };
-
-            r.setSection(type, section);
+            r.setSection(type, JsonParser.read(content, Section.class));
         }
     }
 }
