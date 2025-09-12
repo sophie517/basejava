@@ -13,6 +13,11 @@ public enum ContactType {
         protected String toHtml0(String value) {
             return getTitle() + ": " + toLink("mailto:" + value, value);
         }
+
+        @Override
+        public String toListHtml(String value) {
+            return toLink("mailto:" + value, value); // Без префикса для списка
+        }
     },
     LINKEDIN_PROFILE("Профиль LinkedIn") {
         @Override
@@ -55,6 +60,10 @@ public enum ContactType {
 
     public String toHtml(String value) {
         return (value == null) ? "" : toHtml0(value);
+    }
+
+    public String toListHtml(String value) {
+        return toHtml(value);
     }
 
     public String toLink(String href) {

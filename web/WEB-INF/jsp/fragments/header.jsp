@@ -1,4 +1,9 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<header><a href="resume">Управление резюме</a></header>
+<header>
+    <div class="header-content">
+        <a href="resume" class="back-link">
+            <span class="back-icon">＜</span> Управление резюме
+        </a>
+    </div>
+</header>
 <hr/>

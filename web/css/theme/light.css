@@ -1,0 +1,23 @@
+:root {
+    --primary-color: #c96f7a;
+    --hover-color: #a95a63;
+    --text-dark: #2c2b2b;
+    --text-light: #7d6d6d;
+    --bg-light: #fdf9f9;
+    --bg-white: #ffffff;
+    --border: #e9d6d6;
+    --table-hover: #fafafa;
+    --input-bg: #fafafa;
+}
+
+body.light .icon-btn {
+    background: transparent;
+    color: #666;
+}
+
+body.light .icon-btn:hover {
+    background: #f2f2f2;
+    color: #333;
+    transform: scale(1.15);
+}
+

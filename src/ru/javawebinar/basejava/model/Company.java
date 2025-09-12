@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.HtmlUtil;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serial;
@@ -8,6 +10,8 @@ import java.util.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Company implements Serializable {
+    public static final Company EMPTY = new Company("", "", List.of(Period.EMPTY));
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -60,5 +64,8 @@ public class Company implements Serializable {
         return "";
     }
 
+    public String formatPeriod(Period period) {
+        return HtmlUtil.formatDates(period);
+    }
 
 }

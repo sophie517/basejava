@@ -1,9 +1,11 @@
 package ru.javawebinar.basejava.model;
 
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListSection extends Section {
+    public static final Section EMPTY = new ListSection(new ArrayList<>());
     @Serial
     private static final long serialVersionUID = 1L;
 

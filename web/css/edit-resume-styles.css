@@ -1,0 +1,99 @@
+.resume-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.form-section {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+
+.form-subsection {
+    background: var(--bg-light);
+    padding: 14px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.form-subsection .form-group {
+    margin-bottom: 12px;
+}
+
+.form-grid {
+    display: flex;
+    gap: 16px;
+}
+
+.form-grid .form-group {
+    flex: 1;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+form {
+    margin-top: 20px;
+}
+
+dl {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 14px 0;
+    align-items: center;
+}
+
+dl dt {
+    flex: 0 0 180px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+dl dd {
+    flex: 1;
+    margin: 0;
+}
+
+.resume-form input[type="text"],
+.resume-form input[type="email"],
+.resume-form input[type="url"],
+.resume-form textarea {
+    width: 100%;              /* чтобы растягивались на всю ширину контейнера */
+    padding: 10px 12px;       /* внутренние отступы */
+    border: 1px solid var(--border);
+    border-radius: 8px;       /* скруглённые углы */
+    font-size: 15px;          /* шрифт побольше */
+    background: var(--bg-white);
+    color: var(--text-dark);
+    box-sizing: border-box;   /* чтобы паддинги не ломали ширину */
+}
+
+.resume-form input[type="text"]:focus,
+.resume-form input[type="email"]:focus,
+.resume-form input[type="url"]:focus,
+.resume-form textarea:focus {
+    border-color: var(--input-bg);   /* подсветка рамки при фокусе */
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(100, 150, 250, 0.2);
+}
+
+.resume-form textarea {
+    min-height: 100px; /* чтобы не были совсем маленькими */
+    resize: vertical;  /* разрешаем только вертикальное изменение размера */
+}

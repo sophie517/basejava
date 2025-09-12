@@ -6,6 +6,7 @@ import java.io.Serial;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TextSection extends Section {
+    public static final Section EMPTY = new TextSection("");
     @Serial
     private static final long serialVersionUID = 1L;
 

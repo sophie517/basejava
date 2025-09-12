@@ -12,6 +12,8 @@ import java.time.LocalDate;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Period implements Serializable {
+    public static final Period EMPTY = new Period(null, null, "", "");
+
     @Serial
     private static final long serialVersionUID = 1L;
 

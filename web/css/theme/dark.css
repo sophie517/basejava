@@ -1,0 +1,23 @@
+:root {
+    --primary-color: #e58a94;
+    --hover-color: #c96f7a;
+    --text-dark: #f1f1f1;
+    --text-light: #b5a5a5;
+    --bg-light: #2a2a2a;
+    --bg-white: #1e1e1e;
+    --border: #3a3a3a;
+    --table-hover: #2f2f2f;
+    --input-bg: #2f2f2f;
+}
+
+body.dark .icon-btn {
+    background: #2f2f2f; /* чуть светлее фона */
+    color: #ddd;
+}
+
+body.dark .icon-btn:hover {
+    background: #3a3a3a;
+    color: #fff;
+    transform: scale(1.15);
+}
+

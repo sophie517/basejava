@@ -1,0 +1,76 @@
+.form-section {
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid var(--border);
+}
+
+.form-section h3 {
+    font-size: 20px;
+}
+
+.company-card {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border);
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+}
+
+.company-card h4 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.company-card h4 a,
+.company-card h4 span {
+    color: var(--primary-color);
+    text-decoration: none;
+    text-align: left;
+    padding-left: 260px;
+}
+
+.company-card h4 a:hover {
+    text-decoration: underline;
+    color: var(--hover-color); /* опционально: изменение цвета при наведении */
+}
+
+.resume-period {
+    font-size: 18px;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.resume-period-dates {
+    width: 160px;
+    font-size: 16px;
+    color: var(--text-dark);
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.resume-period-content {
+    flex-grow: 1;
+    font-size: 16px;
+    color: var(--text-dark);
+    text-align: left;
+    padding-left: 100px;
+}
+
+.resume-period-content strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-dark);
+}
+
+.resume-description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-dark);
+}

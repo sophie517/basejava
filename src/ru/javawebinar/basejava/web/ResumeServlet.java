@@ -4,6 +4,8 @@ import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.storage.Storage;
+import ru.javawebinar.basejava.util.DateUtil;
+import ru.javawebinar.basejava.util.HtmlUtil;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,40 +51,52 @@ public class ResumeServlet extends HttpServlet {
 
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null && !value.trim().isEmpty()) {
+            if (!HtmlUtil.isEmpty(value)) {
                 r.setContact(type, value);
             } else {
                 r.getContacts().remove(type);
             }
         }
 
-        for (SectionType type : new SectionType[]{SectionType.PERSONAL, SectionType.OBJECTIVE}) {
+        for (SectionType type : SectionType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null && !value.trim().isEmpty()) {
-                r.setSection(type, new TextSection(value.trim()));
-            } else {
+            String[] values = request.getParameterValues(type.name());
+            if (HtmlUtil.isEmpty(value) && values.length < 2) {
                 r.getSections().remove(type);
-            }
-        }
-
-        for (SectionType type : new SectionType[]{SectionType.ACHIEVEMENT, SectionType.QUALIFICATIONS}) {
-            String value = request.getParameter(type.name());
-            if (value != null && !value.trim().isEmpty()) {
-                String[] elements = value.split("\\r?\\n");
-                List<String> trimmedElements = new ArrayList<>();
-                for (String element : elements) {
-                    String trimmed = element.trim();
-                    if (!trimmed.isEmpty()) {
-                        trimmedElements.add(trimmed);
-                    }
-                }
-                if (!trimmedElements.isEmpty()) {
-                    r.setSection(type, new ListSection(trimmedElements));
-                } else {
-                    r.getSections().remove(type);
-                }
             } else {
-                r.getSections().remove(type);
+                switch (type) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        r.setSection(type, new TextSection(value));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        r.setSection(type, new ListSection(List.of(value.split("\\n"))));
+                        break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        List<Company> companies = new ArrayList<>();
+                        String[] urls = request.getParameterValues(type.name() + "url");
+                        for (int i = 0; i < values.length; i++) {
+                            String name = values[i];
+                            if (!HtmlUtil.isEmpty(name)) {
+                                List<Period> periods = new ArrayList<>();
+                                String pfx = type.name() + i;
+                                String[] startDates = request.getParameterValues(pfx + "startDate");
+                                String[] endDates = request.getParameterValues(pfx + "endDate");
+                                String[] positions = request.getParameterValues(pfx + "position");
+                                String[] descriptions = request.getParameterValues(pfx + "description");
+                                for (int j = 0; j < positions.length; j++) {
+                                    if (!HtmlUtil.isEmpty(positions[j])) {
+                                        periods.add(new Period((LocalDate) DateUtil.parse(startDates[j]), (LocalDate) DateUtil.parse(endDates[j]), positions[j], descriptions[j]));
+                                    }
+                                }
+                                companies.add(new Company(name, urls[i], periods));
+                            }
+                        }
+                        r.setSection(type, new CompanySection(companies));
+                        break;
+                }
             }
         }
 
@@ -94,6 +109,14 @@ public class ResumeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String theme = request.getParameter("theme");
+        if (theme != null) {
+            request.getSession().setAttribute("theme", theme);
+        }
+        if (request.getSession().getAttribute("theme") == null) {
+            request.getSession().setAttribute("theme", "light");
+        }
+
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
         if (action == null) {
@@ -111,12 +134,48 @@ public class ResumeServlet extends HttpServlet {
                 response.sendRedirect("resume");
                 return;
             case "view":
+                r = storage.get(uuid);
+                break;
             case "edit":
                 if (isNew) {
                     r = new Resume("");
                 } else {
                     r = storage.get(uuid);
                 }
+
+                for (SectionType type : SectionType.values()) {
+                    Section section = r.getSection(type);
+                    switch (type) {
+                        case OBJECTIVE:
+                        case PERSONAL:
+                            if (section == null) {
+                                section = TextSection.EMPTY;
+                            }
+                            break;
+                        case ACHIEVEMENT:
+                        case QUALIFICATIONS:
+                            if (section == null) {
+                                section = ListSection.EMPTY;
+                            }
+                            break;
+                        case EXPERIENCE:
+                        case EDUCATION:
+                            CompanySection companySection = (CompanySection) section;
+                            List<Company> newCompanies = new ArrayList<>();
+                            newCompanies.add(Company.EMPTY);
+                            if (section != null) {
+                                for (Company company : companySection.getCompanies()) {
+                                    List<Period> newPeriods = new ArrayList<>();
+                                    newPeriods.add(Period.EMPTY);
+                                    newPeriods.addAll(company.getPeriods());
+                                    newCompanies.add(new Company(company.getName(), company.getLink().getUrl(), newPeriods));
+                                }
+                            }
+                            section = new CompanySection(newCompanies);
+                            break;
+                        }
+                    r.setSection(type, section);
+                    }
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
